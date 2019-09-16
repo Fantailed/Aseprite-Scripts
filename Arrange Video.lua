@@ -41,15 +41,15 @@ function recreateEntries()
 	d:close()
 	d = Dialog("Arrange Sequences")
 	d:separator("Arrange your tags")
-	
+
 	if #sequences == 0 then
 		d:button{id="add_"..1, label="Add Tag: ", text="+", onclick=function() addSequence() end}
 	else
 		for i=1, #sequences do
 			d:combobox{id="tag_"..i, label="Tag "..i..": ", option=sequences[i].tag, options=tags}
 			 :number{id="loop_"..i, label="Loops: ", text=tostring(sequences[i].loop), decimals=0}
-			 :button{id="add_"..i, text="+", onclick=function() addSequence(i) end}
 			 :button{id="rm_"..i, text="-", onclick=function() rmSequence(i) end}
+			 :button{id="add_"..i, text="+", onclick=function() addSequence(i) end}
 		end
 	end
 
