@@ -17,14 +17,15 @@ for i=1, #aspr.tags do
 	tag_name_to_index[string.lower(aspr.tags[i].name)] = i
 end
 
--- Sequences
+-- Sequences struct consisting of the name of the tag and a number of loops
 local sequences = {}
 
 -- Save entry changes between clicks and create new dialog
 function commitChanges()
 	local i = 1
 	while d.data["tag_"..i] do
-		sequences[i] = d.data["tag_"..i]
+		sequences[i].tag = d.data["tag_"..i]
+		sequences[i].loop = d.data["loop_"..i]
 		i = i+1
 	end
 end
@@ -39,7 +40,8 @@ function recreateEntries()
 		d:button{id="add_"..1, label="Add Tag: ", text="+", onclick=function() addSequence() end}
 	else
 		for i=1, #sequences do
-			d:combobox{id="tag_"..i, label="Tag "..i..": ", option=sequences[i], options=tags}
+			d:combobox{id="tag_"..i, label="Tag "..i..": ", option=sequences[i].tag, options=tags}
+			 :number{id="loop_"..i, label="Loops: ", text=tostring(sequences[i].loop), decimals=0}
 			 :button{id="add_"..i, text="+", onclick=function() addSequence(i) end}
 			 :button{id="rm_"..i, text="-", onclick=function() rmSequence(i) end}
 		end
@@ -56,7 +58,11 @@ function addSequence(nr)
 	-- Accept current state of dialog before moving on
 	commitChanges()
 	-- Add entries and adjust list
-	table.insert(sequences, nr)
+	if nr >= #sequences then
+		table.insert(sequences, {tag=tags[1], loop="1"})
+	else
+		table.insert(sequences, nr+1, {tag=tags[1], loop="1"})
+	end
 	recreateEntries()
 end
 
