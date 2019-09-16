@@ -24,14 +24,14 @@ for i=1, #aspr.tags do
 end
 
 -- Sequences struct consisting of the name of the tag and a number of loops
-local sequences = {}
+local tag_sequence = {}
 
 -- Save entry changes between clicks and create new dialog
 function commitChanges()
 	local i = 1
 	while d.data["tag_"..i] do
-		sequences[i].tag = d.data["tag_"..i]
-		sequences[i].loop = d.data["loop_"..i]
+		tag_sequence[i].tag = d.data["tag_"..i]
+		tag_sequence[i].loop = d.data["loop_"..i]
 		i = i+1
 	end
 end
@@ -42,12 +42,12 @@ function recreateEntries()
 	d = Dialog("Arrange Sequences")
 	d:separator("Arrange your tags")
 
-	if #sequences == 0 then
+	if #tag_sequence == 0 then
 		d:button{id="add_"..1, label="Add Tag: ", text="+", onclick=function() addSequence() end}
 	else
-		for i=1, #sequences do
-			d:combobox{id="tag_"..i, label="Tag "..i..": ", option=sequences[i].tag, options=tag_names}
-			 :number{id="loop_"..i, label="Loops: ", text=tostring(sequences[i].loop), decimals=0}
+		for i=1, #tag_sequence do
+			d:combobox{id="tag_"..i, label="Tag "..i..": ", option=tag_sequence[i].tag, options=tag_names}
+			 :number{id="loop_"..i, label="Loops: ", text=tostring(tag_sequence[i].loop), decimals=0}
 			 :button{id="rm_"..i, text="-", onclick=function() rmSequence(i) end}
 			 :button{id="add_"..i, text="+", onclick=function() addSequence(i) end}
 		end
@@ -64,10 +64,10 @@ function addSequence(nr)
 	-- Accept current state of dialog before moving on
 	commitChanges()
 	-- Add entries and adjust list
-	if nr >= #sequences then
-		table.insert(sequences, {tag=tag_names[1], loop="1"})
+	if nr >= #tag_sequence then
+		table.insert(tag_sequence, {tag=tag_names[1], loop="1"})
 	else
-		table.insert(sequences, nr+1, {tag=tag_names[1], loop="1"})
+		table.insert(tag_sequence, nr+1, {tag=tag_names[1], loop="1"})
 	end
 	recreateEntries()
 end
@@ -78,7 +78,7 @@ function rmSequence(nr)
 	-- Accept current state of dialog before moving on
 	commitChanges()
 	-- Delete entries and adjust list
-	table.remove(sequences, nr)
+	table.remove(tag_sequence, nr)
 	-- Recreate panel without that dialog
 	recreateEntries()
 end
