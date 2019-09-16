@@ -29,46 +29,60 @@ function commitChanges()
 	end
 end
 
--- Close current dialog and create a new copy that can still be changed
+-- Create new dialogue from saved sequence
 function recreateEntries()
 	d:close()
 	d = Dialog("Arrange Sequences")
-	for i=1, #sequences do
-		d:combobox{id="tag_"..i, label="Tag "..i..": ", option=sequences[i], options=tags}
-		 :button{id="rm_"..i, text="-", onclick=function() rmSequence(i) end}
+	d:separator("Arrange your tags")
+	
+	if #sequences == 0 then
+		d:button{id="add_"..1, label="Add Tag: ", text="+", onclick=function() addSequence() end}
+	else
+		for i=1, #sequences do
+			d:combobox{id="tag_"..i, label="Tag "..i..": ", option=sequences[i], options=tags}
+			 :button{id="add_"..i, text="+", onclick=function() addSequence(i) end}
+			 :button{id="rm_"..i, text="-", onclick=function() rmSequence(i) end}
+		end
 	end
+
+	d:separator()
+	 :button{id="export", text="Export"}
+	 :show()
 end
 
 -- Add sequence to the end of the list
-function addSequence()
+function addSequence(nr)
+	nr = nr or 1
+	-- Accept current state of dialog before moving on
 	commitChanges()
+	-- Add entries and adjust list
+	table.insert(sequences, nr)
 	recreateEntries()
-	d:combobox{id="tag_"..#sequences+1, label="Tag "..#sequences+1 ..": ", options=tags}
-	 :button{id="rm_"..#sequences+1, text="-", onclick=function() rmSequence(#sequences+1) end}
-	 :button{id="add", text="+", onclick=function() addSequence() end}
-	 :show()
 end
 
 -- Remove sequence from anywhere in the list
 function rmSequence(nr)
-	-- Commit previous additions if applicable
+	nr = nr or #sequence
+	-- Accept current state of dialog before moving on
 	commitChanges()
 	-- Delete entries and adjust list
 	table.remove(sequences, nr)
-	while d.data["tag_"..nr] do
-		d.data["tag_"..nr] = d.data["tag_"..nr+1]
-		nr = nr+1
-	end
 	-- Recreate panel without that dialog
 	recreateEntries()
-	d:button{id="add", text="+", onclick=function() addSequence() end}
-	 :show()
 end
 
 -- Dialog widgets
-d:label{id="help", label="", text="Arrange your tags"}
- :button{id="add", text="+", onclick=function() addSequence() end}
+d:separator("Arrange your tags")
+ :button{id="add", label="Add Tag: ", text="+", onclick=function() addSequence() end}
  :show()
+
+
+
+
+
+
+
+
 
 
 
