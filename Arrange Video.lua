@@ -1,5 +1,11 @@
 -- This script arranges your sprite for you to create small videos consisting of a sequence of tags
 
+--[[ Struct for passing the arguments from the UI to the backend
+     name (String of the name of the animation)
+     loop (Amount of times the animation should be played)
+     etc...
+--]]
+
 local aspr = app.activeSprite
 
 if not aspr then
