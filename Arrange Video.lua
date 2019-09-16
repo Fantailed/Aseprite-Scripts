@@ -16,10 +16,10 @@ end
 local d = Dialog("Arrange Sequences")
 
 -- Build list of available tags
-local tags = {}
+local tag_names = {}
 local tag_name_to_index = {}
 for i=1, #aspr.tags do
-	tags[#tags+1] = aspr.tags[i].name
+	tag_names[#tag_names+1] = aspr.tags[i].name
 	tag_name_to_index[string.lower(aspr.tags[i].name)] = i
 end
 
@@ -46,7 +46,7 @@ function recreateEntries()
 		d:button{id="add_"..1, label="Add Tag: ", text="+", onclick=function() addSequence() end}
 	else
 		for i=1, #sequences do
-			d:combobox{id="tag_"..i, label="Tag "..i..": ", option=sequences[i].tag, options=tags}
+			d:combobox{id="tag_"..i, label="Tag "..i..": ", option=sequences[i].tag, options=tag_names}
 			 :number{id="loop_"..i, label="Loops: ", text=tostring(sequences[i].loop), decimals=0}
 			 :button{id="rm_"..i, text="-", onclick=function() rmSequence(i) end}
 			 :button{id="add_"..i, text="+", onclick=function() addSequence(i) end}
@@ -65,9 +65,9 @@ function addSequence(nr)
 	commitChanges()
 	-- Add entries and adjust list
 	if nr >= #sequences then
-		table.insert(sequences, {tag=tags[1], loop="1"})
+		table.insert(sequences, {tag=tag_names[1], loop="1"})
 	else
-		table.insert(sequences, nr+1, {tag=tags[1], loop="1"})
+		table.insert(sequences, nr+1, {tag=tag_names[1], loop="1"})
 	end
 	recreateEntries()
 end
