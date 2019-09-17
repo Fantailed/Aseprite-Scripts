@@ -30,7 +30,6 @@ end
 
 local tag_sequence = {}				-- User-defined sequence of tags and their options
 local frame_dst = 0					-- Current destination frame to be copied to
-local cel_map = LF2celIDX(aspr)		-- Lookup table for cels
 local cel_seq = {}					-- Sequence of cels to be copied and destination
 
 -- =========================== BACKEND FUNCTIONS ==========================
@@ -45,6 +44,8 @@ function LF2celIDX(sprite)
 	end
 	return map
 end
+
+local cel_map = LF2celIDX(aspr)		-- Lookup table for cels
 
 function copyForward(from, tag_length)
 	for l=1, #aspr.layers do
