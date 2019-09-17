@@ -1,5 +1,5 @@
 # Aseprite-Scripts
-My personal Aseprite scripts. Feel free to [download](https://github.com/Fantailed/Aseprite-Scripts/archive/v0.1.zip) and use :)
+My personal Aseprite scripts. Feel free to [download](https://github.com/Fantailed/Aseprite-Scripts/archive/v0.1.1.zip) and use :)
 
 ## Arrange Clip
 <img src="screenshots/arrange_clip.jpg" width="200">
