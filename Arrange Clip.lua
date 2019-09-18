@@ -11,6 +11,11 @@
 		- name (String of the name of the animation)
 		- loop (Amount of times the animation should be played)
 		- etc...
+	
+	Cel sequence struct:
+		- idx (index of cel in source sprite)
+		- layer (the layer the cel should be copied to in the new sprite)
+		- frame (the frame the cel should be copied to in the new sprite)
 --]]
 
 local aspr = app.activeSprite
@@ -132,7 +137,9 @@ function generate()
 	for i, cel in ipairs(cel_seq) do
 		-- Copy cel content
 		local image = aspr.cels[cel.idx].image
-		local new_cel = new_spr:newCel(new_spr.layers[cel.layer], cel.frame, image, aspr.cels[1].position)
+		local new_cel = new_spr:newCel(new_spr.layers[cel.layer], cel.frame, image, aspr.cels[cel.idx].position)
+		local dur = aspr.cels[cel.idx].frame.duration
+		new_spr.frames[cel.frame].duration = dur
 	end
 end
 
@@ -203,30 +210,3 @@ d:separator("Select your tags")
  :button{id="add", label="Add Tag: ", text="+", onclick=function() addSequence() end}
  :button{id="cancel", text="&Cancel"}
  :show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
